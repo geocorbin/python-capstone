@@ -1,4 +1,4 @@
-# Northwind Multi-Agent RAG System
+# Enterprise Multi-Agent RAG System
 
 A Python CLI-based multi-agent system in Python that can answer enterprise documentation queries end-to-end.
 
@@ -131,16 +131,14 @@ All LLM and embedding calls are mocked in tests, so the suite runs offline and d
 
 ## 5. Design notes & GenAI concepts
 
-- **Hallucination control:** the Qualitative agent is instructed to answer *only* from retrieved
+- **Hallucination control:** the Qualitative agent is instructed to answer only from retrieved
   context and to say so explicitly when nothing relevant is found, rather than guessing. A
   minimum cosine-similarity threshold (`RAG_RELEVANCE_THRESHOLD`, default 0.35) filters out weak
   matches before they ever reach the LLM.
 - **SQL injection / safety:** generated SQL is parsed and rejected if it isn't a single read-only
-  `SELECT` statement (no `INSERT`/`UPDATE`/`DELETE`/`DROP`/etc., no statement chaining).
-- **Agent-tool pattern:** the Manager agent doesn't answer questions itself — it treats the
-  Qualitative and Quantitative agents as tools it calls based on a structured classification
-  decision, which is the core pattern behind tool-calling/agentic systems as opposed to a single
-  LLM chatbot.
+  `SELECT` statement.
+- **Agent-tool pattern:** the Manager agent treats the Qualitative and Quantitative agents as tools it calls based on a structured classification
+  decision.
 - **Prompt design:** each agent uses a narrow, single-purpose system/task prompt (classify only;
   generate SQL only; answer from context only) rather than one large do-everything prompt, which
   keeps failure modes easier to diagnose.
